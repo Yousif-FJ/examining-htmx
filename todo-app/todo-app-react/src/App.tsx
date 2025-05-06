@@ -1,34 +1,84 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+import TodoList from './components/TodoList'
+import TodoForm from './components/TodoForm'
+import { Todo } from './types/Todo'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    // Load todos from localStorage on initial render
+    const savedTodos = localStorage.getItem('todos');
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
+  
+  // Save todos to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const addTodo = (text: string) => {
+    const newTodo: Todo = {
+      id: Date.now(),
+      text,
+      completed: false
+    };
+    setTodos([...todos, newTodo]);
+  };
+
+  const toggleTodo = (id: number) => {
+    setTodos(todos.map(todo => 
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const clearCompleted = () => {
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
+  const completedCount = todos.filter(t => t.completed).length;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <div className="card shadow-sm">
+            <div className="card-header">
+              <h1 className="h4 mb-0 text-center">Todo List</h1>
+            </div>
+            <div className="card-body">
+              <TodoForm onAddTodo={addTodo} />
+              
+              <TodoList 
+                todos={todos} 
+                onToggle={toggleTodo} 
+                onDelete={deleteTodo} 
+              />
+              
+              {todos.length > 0 && (
+                <div className="d-flex justify-content-between align-items-center mt-3">
+                  <small className="text-muted">
+                    {completedCount} of {todos.length} completed
+                  </small>
+                  {completedCount > 0 && (
+                    <button 
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={clearCompleted}
+                    >
+                      Clear completed
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
