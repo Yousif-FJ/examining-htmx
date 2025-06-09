@@ -13,21 +13,22 @@
                 </div>
                 <div class="card-body">
                     <!-- Todo Form -->
-                    <form hx-post="?handler=AddTodo" hx-target="#todo-list" hx-swap="outerHTML">
+                    <form 
+                     hx-post
+                     hx-page="index"
+                     hx-page-handler="AddTodo"
+                     hx-target="#todo-list" hx-swap="outerHTML">
                         <div class="input-group mb-3">
                             <input 
-                                asp-for="NewTodoText"
+                                name="@nameof(Model.NewTodoText)"
                                 type="text" 
                                 class="form-control" 
                                 placeholder="Add a new task" 
-                                aria-label="New task"
-                                aria-describedby="button-add"
                             />
                             <button 
                                 class="btn btn-primary" 
                                 type="submit" 
-                                id="button-add"
-                            >
+                                id="button-add">
                                 Add
                             </button>
                         </div>

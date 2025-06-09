@@ -6,7 +6,7 @@ using todo_app_htmx.Models;
 
 namespace todo_app_htmx.Pages;
 
-public class IndexModel(TodoAggregate todoAggregate, ILogger<IndexModel> logger) : PageModel
+public class IndexModel(TodoAggregate todoAggregate) : PageModel
 {
     private readonly TodoAggregate _todoAggregate = todoAggregate;
 
