@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using todo_app_htmx.Components;
+using todo_app_htmx.Framework;
 using todo_app_htmx.Models;
 
 namespace todo_app_htmx.Pages;
 
-public class IndexModel(TodoAggregate todoAggregate) : PageModel
+public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension
 {
     private readonly TodoAggregate _todoAggregate = todoAggregate;
 
@@ -26,7 +27,7 @@ public class IndexModel(TodoAggregate todoAggregate) : PageModel
         if (string.IsNullOrWhiteSpace(NewTodoText))
         {
             ModelState.AddModelError(nameof(NewTodoText), "Todo text cannot be empty.");
-            return Partial("/Components/_TodoList.cshtml", Todos);
+            return ViewComponent<TodoList, List<Todo>>(Todos);
         }
 
         Todos.Add(new Todo
@@ -36,7 +37,7 @@ public class IndexModel(TodoAggregate todoAggregate) : PageModel
             Completed = false
         });
 
-        return Partial("/Components/_TodoList.cshtml", Todos);
+        return ViewComponent<TodoList, List<Todo>>(Todos);
     }
 
     public IActionResult OnPostToggleTodo(int id)
@@ -47,14 +48,14 @@ public class IndexModel(TodoAggregate todoAggregate) : PageModel
             return NotFound();
         }
         todo.Completed = !todo.Completed;
-        return Partial("/Components/_TodoItem.cshtml", todo);
+        return ViewComponent<TodoItem, Todo>(todo);
     }
 
     public IActionResult OnPostDeleteTodo(int id)
     {
         Todos.RemoveAll(todo => todo.Id == id);
 
-        return Partial("/Components/_TodoList.cshtml", Todos);
+        return ViewComponent<TodoList, List<Todo>>(Todos);
     }
 
     public IActionResult OnPostClearCompleted()

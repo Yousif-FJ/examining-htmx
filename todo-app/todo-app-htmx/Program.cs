@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using todo_app_htmx.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
 {
-   options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+
+    options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
 });
+
 builder.Services.AddSingleton(new TodoAggregate());
 
 var app = builder.Build();

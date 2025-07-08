@@ -1,4 +1,5 @@
 ﻿@page
+@using todo_app_htmx.Components
 @model IndexModel
 @{
     ViewData["Title"] = "Todo App";
@@ -23,8 +24,7 @@
                                 </button>
                             </div>
                         </form>
-
-                        <partial name="/Components/_TodoList.cshtml" model="Model.Todos" />
+                        @(await Component.InvokeTypedComponentAsync<TodoList, List<Todo>>(Model.Todos))
                     </div>
                 </div>
             </div>
