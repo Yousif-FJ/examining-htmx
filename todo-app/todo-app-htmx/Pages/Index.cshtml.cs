@@ -48,7 +48,7 @@ public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension
             return NotFound();
         }
         todo.Completed = !todo.Completed;
-        return ViewComponent<TodoItem, Todo>(todo);
+        return ViewComponent<TodoList, List<Todo>>(Todos);
     }
 
     public IActionResult OnPostDeleteTodo(int id)
@@ -60,7 +60,8 @@ public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension
 
     public IActionResult OnPostClearCompleted()
     {
-        Todos.Clear();
-        return Partial("/Components/_TodoList.cshtml", Todos);
+        Todos.RemoveAll(todo => todo.Completed);
+
+        return ViewComponent<TodoList, List<Todo>>(Todos);
     }
 }

@@ -26,7 +26,10 @@
             </small>
             @if (Model.Count > 0)
             {
-                <button class="btn btn-sm btn-outline-secondary" hx-post="?handler=ClearCompleted" hx-target="#todo-list"
+                <button class="btn btn-sm btn-outline-secondary"
+                        hx-page="index"
+                        hx-page-handler="ClearCompleted"
+                        hx-post hx-target="#todo-list"
                         hx-swap="outerHTML" hx-confirm="Are you sure you want to clear all completed tasks?">
                     Clear completed
                 </button>
