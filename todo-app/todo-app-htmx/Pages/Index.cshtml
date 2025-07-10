@@ -13,9 +13,9 @@
                     <h1 class="h4 mb-0 text-center">Todo List</h1>
                 </div>
                 <div class="card-body">
-                    <div id="todo-component">
+                    <div>
                         <!-- Todo Form -->
-                        <form hx-post hx-page="index" hx-page-handler="AddTodo" hx-target="#todo-list" hx-swap="outerHTML"
+                        <form hx-post hx-page="index" hx-page-handler="AddTodo" hx-swap="none"
                               hx-on::after-request="this.reset()">
                             <div class="input-group mb-3">
                                 <input name="@nameof(Model.NewTodoText)" type="text" class="form-control" placeholder="Add a new task" />
@@ -25,6 +25,18 @@
                             </div>
                         </form>
                         @(await Component.InvokeTypedComponentAsync<TodoList, List<Todo>>(Model.Todos))
+                            <hr/>
+                        @if (Model.Todos.Count > 0)
+                        {
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    hx-page="index"
+                                    hx-page-handler="ClearCompleted"
+                                    hx-swap="none"
+                                    hx-post hx-confirm="Are you sure you want to clear all completed tasks?">
+                                Clear completed
+                            </button>
+                        }
+                        @(await Component.InvokeTypedComponentAsync<TodoStats, List<Todo>>(Model.Todos))
                     </div>
                 </div>
             </div>

@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using todo_app_htmx.Components;
+using todo_app_htmx.Components.CombinedComponents;
 using todo_app_htmx.Framework;
 using todo_app_htmx.Models;
 
 namespace todo_app_htmx.Pages;
+
 
 public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension
 {
@@ -36,8 +38,7 @@ public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension
             Text = NewTodoText,
             Completed = false
         });
-
-        return ViewComponent<TodoList, List<Todo>>(Todos);
+        return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
     public IActionResult OnPostToggleTodo(int id)
@@ -48,20 +49,21 @@ public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension
             return NotFound();
         }
         todo.Completed = !todo.Completed;
-        return ViewComponent<TodoList, List<Todo>>(Todos);
+
+        return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
     public IActionResult OnPostDeleteTodo(int id)
     {
         Todos.RemoveAll(todo => todo.Id == id);
 
-        return ViewComponent<TodoList, List<Todo>>(Todos);
+        return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
     public IActionResult OnPostClearCompleted()
     {
         Todos.RemoveAll(todo => todo.Completed);
 
-        return ViewComponent<TodoList, List<Todo>>(Todos);
+        return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 }
