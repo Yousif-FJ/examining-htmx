@@ -7,9 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddOpenApi();
 
-// Add Entity Framework with In-Memory database
+// Add Entity Framework with SQLite database
 builder.Services.AddDbContext<TodoDbContext>(options =>
-    options.UseInMemoryDatabase("TodoDatabase"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? "Data Source=todos.db"));
 
 // Add CORS for frontend communication
 builder.Services.AddCors(options =>
@@ -23,6 +24,13 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Ensure database is created on startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
+    context.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
