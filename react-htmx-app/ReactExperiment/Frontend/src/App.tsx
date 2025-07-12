@@ -1,43 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import TodoList from './components/TodoList'
 import TodoForm from './components/TodoForm'
-import { Todo } from './types/Todo'
+import { useTodos } from './hooks/useTodos'
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    // Load todos from localStorage on initial render
-    const savedTodos = localStorage.getItem('todos');
-    return savedTodos ? JSON.parse(savedTodos) : [];
-  });
-  
-  // Save todos to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  const {
+    todos,
+    loading,
+    error,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    clearCompleted,
+    refetch
+  } = useTodos();
 
-  const addTodo = (text: string) => {
-    const newTodo: Todo = {
-      id: Date.now(),
-      text,
-      completed: false
-    };
-    setTodos([...todos, newTodo]);
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const toggleTodo = (id: number) => {
-    setTodos(todos.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
-  };
-
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed));
+  const handleAddTodo = async (text: string) => {
+    try {
+      setIsSubmitting(true);
+      await addTodo(text);
+    } catch (err) {
+      // Error is already handled in the hook
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const completedCount = todos.filter(t => t.completed).length;
@@ -51,15 +41,38 @@ function App() {
               <h1 className="h4 mb-0 text-center">Todo List</h1>
             </div>
             <div className="card-body">
-              <TodoForm onAddTodo={addTodo} />
+              {error && (
+                <div className="alert alert-danger d-flex justify-content-between align-items-center">
+                  <span>{error}</span>
+                  <button 
+                    className="btn btn-sm btn-outline-secondary"
+                    onClick={refetch}
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
               
-              <TodoList 
-                todos={todos} 
-                onToggle={toggleTodo} 
-                onDelete={deleteTodo} 
+              <TodoForm 
+                onAddTodo={handleAddTodo} 
+                isSubmitting={isSubmitting}
               />
               
-              {todos.length > 0 && (
+              {loading ? (
+                <div className="text-center py-4">
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                <TodoList 
+                  todos={todos} 
+                  onToggle={toggleTodo} 
+                  onDelete={deleteTodo} 
+                />
+              )}
+              
+              {!loading && todos.length > 0 && (
                 <div className="d-flex justify-content-between align-items-center mt-3">
                   <small className="text-muted">
                     {completedCount} of {todos.length} completed

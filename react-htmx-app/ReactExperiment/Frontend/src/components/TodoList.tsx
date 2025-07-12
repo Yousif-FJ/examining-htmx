@@ -4,8 +4,8 @@ import { Todo } from '../types/Todo';
 
 interface TodoListProps {
   todos: Todo[];
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
+  onToggle: (id: number) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
 }
 
 const TodoList: FC<TodoListProps> = ({ todos, onToggle, onDelete }) => {
