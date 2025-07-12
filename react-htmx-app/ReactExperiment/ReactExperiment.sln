@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{8B38DF90-45C4-4CCA-A7BA-CB496804EA7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactExperiment.Backend.API", "Backend\ReactExperiment.Backend.API.csproj", "{6474F555-6809-1750-23C3-3FEE365482C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6474F555-6809-1750-23C3-3FEE365482C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6474F555-6809-1750-23C3-3FEE365482C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6474F555-6809-1750-23C3-3FEE365482C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6474F555-6809-1750-23C3-3FEE365482C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6474F555-6809-1750-23C3-3FEE365482C6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDF2A167-22AA-4B79-A6DE-84254E7FE9A9}
+	EndGlobalSection
+EndGlobal
