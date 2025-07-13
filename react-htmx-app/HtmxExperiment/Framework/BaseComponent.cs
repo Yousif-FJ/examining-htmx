@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace todo_app_htmx.Framework;
+namespace HtmxExperiment.Framework;
 
 public abstract class BaseComponent<TModel> : ViewComponent
 {

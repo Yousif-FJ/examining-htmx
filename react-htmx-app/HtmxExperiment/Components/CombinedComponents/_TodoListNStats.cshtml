@@ -1,4 +1,7 @@
-﻿@model List<Todo>
+﻿@using HtmxExperiment.Components
+@using HtmxExperiment.Framework
+@using HtmxExperiment.Models
+@model List<Todo>
 
 @(await Component.InvokeTypedComponentAsync<TodoList, List<Todo>>(Model))
 @(await Component.InvokeTypedComponentAsync<TodoStats, List<Todo>>(Model))

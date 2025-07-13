@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>todo_app_htmx</RootNamespace>
+    <RootNamespace>HtmxExperiment</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

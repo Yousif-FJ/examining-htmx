@@ -18,7 +18,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo, isSubmitting = false }) => {
       try {
         await onAddTodo(inputValue);
         setInputValue('');
-      } catch (err) {
+      } catch {
         // Error handling is done in the parent component
       }
     }

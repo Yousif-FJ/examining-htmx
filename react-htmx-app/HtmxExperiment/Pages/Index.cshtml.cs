@@ -1,10 +1,10 @@
+using HtmxExperiment.Components;
+using HtmxExperiment.Components.CombinedComponents;
+using HtmxExperiment.Framework;
+using HtmxExperiment.Models;
 using Microsoft.AspNetCore.Mvc;
-using todo_app_htmx.Components;
-using todo_app_htmx.Components.CombinedComponents;
-using todo_app_htmx.Framework;
-using todo_app_htmx.Models;
 
-namespace todo_app_htmx.Pages;
+namespace HtmxExperiment.Pages;
 
 
 public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension

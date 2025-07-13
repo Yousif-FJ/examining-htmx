@@ -1,4 +1,7 @@
-﻿@model List<todo_app_htmx.Models.Todo>
+﻿@using HtmxExperiment.Components
+@using HtmxExperiment.Framework
+@using HtmxExperiment.Models
+@model List<Todo>
 
 <div id="todo-list" hx-swap-oob='true'>
     @if (Model.Count == 0)

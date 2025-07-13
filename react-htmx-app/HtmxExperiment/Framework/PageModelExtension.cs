@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace todo_app_htmx.Framework;
+namespace HtmxExperiment.Framework;
 
 public class PageModelExtension : PageModel
 { 

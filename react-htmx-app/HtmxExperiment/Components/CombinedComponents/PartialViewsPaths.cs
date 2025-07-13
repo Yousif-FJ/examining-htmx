@@ -1,4 +1,4 @@
-﻿namespace todo_app_htmx.Components.CombinedComponents;
+﻿namespace HtmxExperiment.Components.CombinedComponents;
 
 public class PartialViewsPaths
 {

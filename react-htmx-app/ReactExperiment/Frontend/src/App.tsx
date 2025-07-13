@@ -23,7 +23,7 @@ function App() {
     try {
       setIsSubmitting(true);
       await addTodo(text);
-    } catch (err) {
+    } catch  {
       // Error is already handled in the hook
     } finally {
       setIsSubmitting(false);

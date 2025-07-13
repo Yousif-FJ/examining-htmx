@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using todo_app_htmx.Framework;
-using todo_app_htmx.Models;
+﻿using HtmxExperiment.Framework;
+using HtmxExperiment.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace todo_app_htmx.Components;
+namespace HtmxExperiment.Components;
 
 public class TodoList : BaseComponent<List<Todo>>
 {

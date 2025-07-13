@@ -15,7 +15,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo, onToggle, onDelete }) => {
     try {
       setIsToggling(true);
       await onToggle(todo.id);
-    } catch (err) {
+    } catch {
       // Error handling is done in the parent component
     } finally {
       setIsToggling(false);
@@ -26,7 +26,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo, onToggle, onDelete }) => {
     try {
       setIsDeleting(true);
       await onDelete(todo.id);
-    } catch (err) {
+    } catch {
       // Error handling is done in the parent component
     } finally {
       setIsDeleting(false);

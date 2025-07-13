@@ -1,4 +1,4 @@
-namespace todo_app_htmx.Models;
+namespace HtmxExperiment.Models;
 
 public class Todo
 {

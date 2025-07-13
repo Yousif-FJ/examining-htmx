@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 
-namespace todo_app_htmx.Framework;
+namespace HtmxExperiment.Framework;
 
 public static class ViewComponentHelper
 {
