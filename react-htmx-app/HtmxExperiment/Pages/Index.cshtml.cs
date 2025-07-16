@@ -2,68 +2,73 @@ using HtmxExperiment.Components;
 using HtmxExperiment.Components.CombinedComponents;
 using HtmxExperiment.Framework;
 using HtmxExperiment.Models;
+using HtmxExperiment.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HtmxExperiment.Pages;
 
-
-public class IndexModel(TodoAggregate todoAggregate) : PageModelExtension
+public class IndexModel(ITodoService todoService) : PageModelExtension
 {
-    private readonly TodoAggregate _todoAggregate = todoAggregate;
+    private readonly ITodoService _todoService = todoService;
 
-    public List<Todo> Todos => _todoAggregate.Todos;
+    public List<Todo> Todos { get; set; } = [];
 
     [BindProperty]
     public string? NewTodoText { get; set; }
 
-    public int CompletedCount => Todos.Count(todo => todo.Completed);
-    public int TotalCount => Todos.Count;
+    public int CompletedCount { get; set; }
+    public int TotalCount { get; set; }
 
-    public IActionResult OnGet()
+    public async Task<IActionResult> OnGetAsync()
     {
+        await LoadTodosAsync();
         return Page();
     }
 
-    public IActionResult OnPostAddTodo()
+    public async Task<IActionResult> OnPostAddTodoAsync()
     {
         if (string.IsNullOrWhiteSpace(NewTodoText))
         {
             ModelState.AddModelError(nameof(NewTodoText), "Todo text cannot be empty.");
+            await LoadTodosAsync();
             return ViewComponent<TodoList, List<Todo>>(Todos);
         }
 
-        Todos.Add(new Todo
-        {
-            Id = Todos.Count + 1,
-            Text = NewTodoText,
-            Completed = false
-        });
+        await _todoService.AddTodoAsync(NewTodoText);
+        await LoadTodosAsync();
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
-    public IActionResult OnPostToggleTodo(int id)
+    public async Task<IActionResult> OnPostToggleTodoAsync(int id)
     {
-        var todo = Todos.FirstOrDefault(todo => todo.Id == id);
+        var todo = await _todoService.ToggleTodoAsync(id);
         if (todo == null)
         {
             return NotFound();
         }
-        todo.Completed = !todo.Completed;
 
+        await LoadTodosAsync();
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
-    public IActionResult OnPostDeleteTodo(int id)
+    public async Task<IActionResult> OnPostDeleteTodoAsync(int id)
     {
-        Todos.RemoveAll(todo => todo.Id == id);
-
+        await _todoService.DeleteTodoAsync(id);
+        await LoadTodosAsync();
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
-    public IActionResult OnPostClearCompleted()
+    public async Task<IActionResult> OnPostClearCompletedAsync()
     {
-        Todos.RemoveAll(todo => todo.Completed);
-
+        await _todoService.ClearCompletedAsync();
+        await LoadTodosAsync();
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
+    }
+
+    private async Task LoadTodosAsync()
+    {
+        Todos = await _todoService.GetAllTodosAsync();
+        CompletedCount = await _todoService.GetCompletedCountAsync();
+        TotalCount = await _todoService.GetTotalCountAsync();
     }
 }
