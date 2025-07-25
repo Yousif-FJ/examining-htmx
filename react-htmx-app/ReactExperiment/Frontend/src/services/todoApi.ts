@@ -26,7 +26,9 @@ class TodoApiService {
   }
 
   async getAllTodos(): Promise<Todo[]> {
-    const response = await fetch(`${API_BASE_URL}/todos/`);
+    const response = await fetch(`${API_BASE_URL}/todos/`, {
+      credentials: 'include', // Include cookies for authentication
+    });
     return this.handleResponse<Todo[]>(response);
   }
 
@@ -36,6 +38,7 @@ class TodoApiService {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // Include cookies for authentication
       body: JSON.stringify(request),
     });
     return this.handleResponse<Todo>(response);
@@ -44,6 +47,7 @@ class TodoApiService {
   async toggleTodo(id: number): Promise<Todo> {
     const response = await fetch(`${API_BASE_URL}/todos/${id}/toggle`, {
       method: 'PATCH',
+      credentials: 'include', // Include cookies for authentication
     });
     return this.handleResponse<Todo>(response);
   }
@@ -51,6 +55,7 @@ class TodoApiService {
   async deleteTodo(id: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
       method: 'DELETE',
+      credentials: 'include', // Include cookies for authentication
     });
     return this.handleResponse<void>(response);
   }
@@ -58,6 +63,7 @@ class TodoApiService {
   async clearCompletedTodos(): Promise<ClearCompletedResponse> {
     const response = await fetch(`${API_BASE_URL}/todos/completed`, {
       method: 'DELETE',
+      credentials: 'include', // Include cookies for authentication
     });
     return this.handleResponse<ClearCompletedResponse>(response);
   }
