@@ -1,4 +1,4 @@
-import { FC, useState, ChangeEvent, FormEvent } from 'react';
+import { FC, useState, ChangeEvent, FormEvent, useRef } from 'react';
 
 interface TodoFormProps {
   onAddTodo: (text: string) => Promise<void>;
@@ -7,6 +7,7 @@ interface TodoFormProps {
 
 const TodoForm: FC<TodoFormProps> = ({ onAddTodo, isSubmitting = false }) => {
   const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -18,8 +19,16 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo, isSubmitting = false }) => {
       try {
         await onAddTodo(inputValue);
         setInputValue('');
+        // Restore focus to the input after adding the todo
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
       } catch {
         // Error handling is done in the parent component
+        // Restore focus even if there's an error
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
       }
     }
   };
@@ -28,6 +37,7 @@ const TodoForm: FC<TodoFormProps> = ({ onAddTodo, isSubmitting = false }) => {
     <form onSubmit={handleSubmit}>
       <div className="input-group mb-3">
         <input 
+          ref={inputRef}
           type="text" 
           className="form-control"
           placeholder="Add a new task"

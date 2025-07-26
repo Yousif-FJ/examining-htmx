@@ -39,9 +39,7 @@ public static class AuthEndpoints
             var user = new User
             {
                 UserName = request.Email,
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName
+                Email = request.Email
             };
 
             var result = await userManager.CreateAsync(user, request.Password);
@@ -65,9 +63,7 @@ public static class AuthEndpoints
                 User = new UserDto
                 {
                     Id = user.Id,
-                    Email = user.Email!,
-                    FirstName = user.FirstName ?? "",
-                    LastName = user.LastName ?? ""
+                    Email = user.Email!
                 }
             });
         }
@@ -113,9 +109,7 @@ public static class AuthEndpoints
                 User = new UserDto
                 {
                     Id = user.Id,
-                    Email = user.Email!,
-                    FirstName = user.FirstName ?? "",
-                    LastName = user.LastName ?? ""
+                    Email = user.Email!
                 }
             });
         }
@@ -157,9 +151,7 @@ public static class AuthEndpoints
             User = new UserDto
             {
                 Id = currentUser.Id,
-                Email = currentUser.Email!,
-                FirstName = currentUser.FirstName ?? "",
-                LastName = currentUser.LastName ?? ""
+                Email = currentUser.Email!
             }
         });
     }

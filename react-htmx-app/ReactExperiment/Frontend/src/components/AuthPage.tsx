@@ -17,10 +17,10 @@ const AuthPage: React.FC = () => {
     }
   };
 
-  const handleRegister = async (email: string, password: string, firstName: string, lastName: string) => {
+  const handleRegister = async (email: string, password: string) => {
     setLoading(true);
     try {
-      await register({ email, password, firstName, lastName });
+      await register({ email, password });
     } finally {
       setLoading(false);
     }

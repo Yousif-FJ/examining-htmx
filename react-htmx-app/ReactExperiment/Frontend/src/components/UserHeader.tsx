@@ -18,7 +18,6 @@ const UserHeader: React.FC = () => {
     <div className="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
       <div>
         <span className="text-muted">Welcome, </span>
-        <strong>{user.firstName} {user.lastName}</strong>
         <small className="text-muted d-block">{user.email}</small>
       </div>
       <button 

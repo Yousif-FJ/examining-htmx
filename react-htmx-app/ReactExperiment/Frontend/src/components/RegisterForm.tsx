@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 interface RegisterFormProps {
-  onRegister: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  onRegister: (email: string, password: string) => Promise<void>;
   onSwitchToLogin: () => void;
   loading?: boolean;
 }
@@ -9,15 +9,13 @@ interface RegisterFormProps {
 const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin, loading = false }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     
-    if (!email || !password || !firstName || !lastName) {
+    if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
@@ -28,7 +26,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin
     }
 
     try {
-      await onRegister(email, password, firstName, lastName);
+      await onRegister(email, password);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     }
@@ -43,33 +41,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin
           {error}
         </div>
       )}
-      
-      <div className="row mb-3">
-        <div className="col">
-          <label htmlFor="firstName" className="form-label">First Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            disabled={loading}
-            required
-          />
-        </div>
-        <div className="col">
-          <label htmlFor="lastName" className="form-label">Last Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            disabled={loading}
-            required
-          />
-        </div>
-      </div>
       
       <div className="mb-3">
         <label htmlFor="email" className="form-label">Email</label>
