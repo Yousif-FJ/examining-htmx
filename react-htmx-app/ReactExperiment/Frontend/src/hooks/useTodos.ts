@@ -10,6 +10,7 @@ export interface UseTodosResult {
   toggleTodo: (id: number) => Promise<void>;
   deleteTodo: (id: number) => Promise<void>;
   clearCompleted: () => Promise<void>;
+  reorderTodos: (reorderedTodos: Todo[]) => Promise<void>;
   refetch: () => Promise<void>;
 }
 
@@ -23,7 +24,9 @@ export const useTodos = (): UseTodosResult => {
       setLoading(true);
       setError(null);
       const todosData = await todoApi.getAllTodos();
-      setTodos(todosData);
+      // Sort todos by order
+      const sortedTodos = todosData.sort((a, b) => a.order - b.order);
+      setTodos(sortedTodos);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch todos');
     } finally {
@@ -77,6 +80,23 @@ export const useTodos = (): UseTodosResult => {
     }
   };
 
+  const reorderTodos = async (reorderedTodos: Todo[]) => {
+    try {
+      setError(null);
+      // Optimistically update the local state
+      setTodos(reorderedTodos);
+      
+      // Send the reorder request to the server
+      const todoIds = reorderedTodos.map(todo => todo.id);
+      await todoApi.reorderTodos({ todoIds });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to reorder todos');
+      // Revert the optimistic update by refetching
+      await fetchTodos();
+      throw err;
+    }
+  };
+
   useEffect(() => {
     fetchTodos();
   }, []);
@@ -89,6 +109,7 @@ export const useTodos = (): UseTodosResult => {
     toggleTodo,
     deleteTodo,
     clearCompleted,
+    reorderTodos,
     refetch: fetchTodos,
   };
 };

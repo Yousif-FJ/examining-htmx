@@ -19,6 +19,7 @@ function TodoApp() {
     toggleTodo,
     deleteTodo,
     clearCompleted,
+    reorderTodos,
     refetch
   } = useTodos();
 
@@ -106,6 +107,7 @@ function TodoApp() {
                     todos={todos} 
                     onToggle={toggleTodo} 
                     onDelete={deleteTodo} 
+                    onReorder={reorderTodos}
                   />
                 )}
                 

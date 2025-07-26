@@ -10,6 +10,10 @@ export interface ClearCompletedResponse {
   deletedCount: number;
 }
 
+export interface ReorderTodosRequest {
+  todoIds: number[];
+}
+
 class TodoApiService {
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
@@ -66,6 +70,18 @@ class TodoApiService {
       credentials: 'include', // Include cookies for authentication
     });
     return this.handleResponse<ClearCompletedResponse>(response);
+  }
+
+  async reorderTodos(request: ReorderTodosRequest): Promise<Todo[]> {
+    const response = await fetch(`${API_BASE_URL}/todos/reorder`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Include cookies for authentication
+      body: JSON.stringify(request),
+    });
+    return this.handleResponse<Todo[]>(response);
   }
 }
 

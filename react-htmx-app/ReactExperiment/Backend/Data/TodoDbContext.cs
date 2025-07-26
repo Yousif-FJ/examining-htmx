@@ -21,6 +21,7 @@ public class TodoDbContext : IdentityDbContext<User>
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Text).IsRequired().HasMaxLength(500);
             entity.Property(e => e.Completed).IsRequired();
+            entity.Property(e => e.Order).IsRequired();
             
             // Configure relationship with User
             entity.HasOne(e => e.User)
