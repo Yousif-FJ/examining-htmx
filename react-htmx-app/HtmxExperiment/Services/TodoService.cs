@@ -15,9 +15,9 @@ public interface ITodoService
     Task<int> GetTotalCountAsync();
 }
 
-public class TodoService(TodoDbContext context) : ITodoService
+public class TodoService(ApplicationDbContext context) : ITodoService
 {
-    private readonly TodoDbContext _context = context;
+    private readonly ApplicationDbContext _context = context;
 
     public async Task<List<Todo>> GetAllTodosAsync()
     {
