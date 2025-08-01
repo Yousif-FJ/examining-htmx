@@ -12,11 +12,16 @@
     }
     else
     {
-        <ul class="list-group">
-            @foreach (var todo in Model)
-            {
-                @(await Component.InvokeTypedComponentAsync<TodoItem, Todo>(todo))
-            }
-        </ul>
+        <div class="list-group sortable" hx-post hx-page="index" hx-page-handler="UpdateTodoOrder" hx-trigger="end" hx-swap="none" 
+            hx-include=".sort-input">
+            <div class="htmx-indicator d-none">
+                    Updating order...
+            </div>
+                @foreach (var todo in Model)
+                {
+                    @(await Component.InvokeTypedComponentAsync<TodoItem, Todo>(todo))
+                }
+        </div>
     }
 </div>
+

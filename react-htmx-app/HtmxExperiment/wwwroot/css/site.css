@@ -24,3 +24,30 @@ body {
 .text-decoration-line-through {
   color: #6c757d;
 }
+
+ Sortable styles 
+.sortable .list-group-item {
+  cursor: move;
+  transition: all 0.2s ease;
+}
+
+.sortable .list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.sortable .list-group-item.sortable-ghost {
+  opacity: 0.4;
+  background-color: #e9ecef;
+}
+
+.sortable .list-group-item.sortable-chosen {
+  background-color: #e7f3ff;
+  border-color: #0d6efd;
+}
+
+.sortable .list-group-item.sortable-drag {
+  opacity: 1;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transform: rotate(2deg);
+}

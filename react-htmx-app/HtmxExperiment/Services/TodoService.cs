@@ -13,6 +13,7 @@ public interface ITodoService
     Task<int> ClearCompletedAsync();
     Task<int> GetCompletedCountAsync();
     Task<int> GetTotalCountAsync();
+    Task UpdateTodoOrderAsync(int[] todoIds);
 }
 
 public class TodoService(ApplicationDbContext context) : ITodoService
@@ -21,7 +22,7 @@ public class TodoService(ApplicationDbContext context) : ITodoService
 
     public async Task<List<Todo>> GetAllTodosAsync()
     {
-        return await _context.Todos.OrderBy(t => t.CreatedAt).ToListAsync();
+        return await _context.Todos.OrderBy(t => t.Order).ToListAsync();
     }
 
     public async Task<Todo?> GetTodoByIdAsync(int id)
@@ -31,11 +32,14 @@ public class TodoService(ApplicationDbContext context) : ITodoService
 
     public async Task<Todo> AddTodoAsync(string text)
     {
+        var maxOrder = await _context.Todos.MaxAsync(t => (int?)t.Order) ?? 0;
+        
         var todo = new Todo
         {
             Text = text.Trim(),
             Completed = false,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            Order = maxOrder + 1
         };
 
         _context.Todos.Add(todo);
@@ -81,5 +85,18 @@ public class TodoService(ApplicationDbContext context) : ITodoService
     public async Task<int> GetTotalCountAsync()
     {
         return await _context.Todos.CountAsync();
+    }
+
+    public async Task UpdateTodoOrderAsync(int[] todoIds)
+    {
+        for (int i = 0; i < todoIds.Length; i++)
+        {
+            var todo = await _context.Todos.FindAsync(todoIds[i]);
+            if (todo != null)
+            {
+                todo.Order = i + 1;
+            }
+        }
+        await _context.SaveChangesAsync();
     }
 }

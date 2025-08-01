@@ -13,9 +13,6 @@ public class IndexModel(ITodoService todoService) : PageModelExtension
 
     public List<Todo> Todos { get; set; } = [];
 
-    [BindProperty]
-    public string? NewTodoText { get; set; }
-
     public int CompletedCount { get; set; }
     public int TotalCount { get; set; }
 
@@ -25,16 +22,16 @@ public class IndexModel(ITodoService todoService) : PageModelExtension
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAddTodoAsync()
+    public async Task<IActionResult> OnPostAddTodoAsync(string newTodoText)
     {
-        if (string.IsNullOrWhiteSpace(NewTodoText))
+        if (string.IsNullOrWhiteSpace(newTodoText))
         {
-            ModelState.AddModelError(nameof(NewTodoText), "Todo text cannot be empty.");
+            ModelState.AddModelError(nameof(newTodoText), "Todo text cannot be empty.");
             await LoadTodosAsync();
             return ViewComponent<TodoList, List<Todo>>(Todos);
         }
 
-        await _todoService.AddTodoAsync(NewTodoText);
+        await _todoService.AddTodoAsync(newTodoText);
         await LoadTodosAsync();
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
@@ -61,6 +58,17 @@ public class IndexModel(ITodoService todoService) : PageModelExtension
     public async Task<IActionResult> OnPostClearCompletedAsync()
     {
         await _todoService.ClearCompletedAsync();
+        await LoadTodosAsync();
+        return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
+    }
+
+    public async Task<IActionResult> OnPostUpdateTodoOrderAsync(int[] todoIds)
+    {
+        if (todoIds != null && todoIds.Length > 0)
+        {
+            await _todoService.UpdateTodoOrderAsync(todoIds);
+        }
+        
         await LoadTodosAsync();
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
