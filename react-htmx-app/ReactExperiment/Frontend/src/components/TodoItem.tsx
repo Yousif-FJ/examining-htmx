@@ -51,10 +51,9 @@ const TodoItem: FC<TodoItemProps> = ({
       onDragStart={(e) => onDragStart(e, todo)}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e, todo)}
-      style={{ cursor: 'move' }}
     >
       <div className="d-flex align-items-center">
-        <div className="drag-handle me-2" style={{ cursor: 'grab' }}>
+        <div className="drag-handle me-2" style={{ cursor: 'move' }}>
           <span style={{ fontSize: '1.2em', color: '#6c757d' }}>⋮⋮</span>
         </div>
         <div className="form-check">
