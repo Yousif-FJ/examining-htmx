@@ -12,6 +12,23 @@
                     <h1 class="h4 mb-0 text-center">Todo List</h1>
                 </div>
                 <div class="card-body">
+                        <!-- Search Form -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input id="search-input"
+                                       name="searchTerm" 
+                                       type="text" 
+                                       class="form-control" 
+                                       placeholder="Search tasks..." 
+                                       value="@Model.SearchTerm"
+                                       hx-get
+                                       hx-page="index"
+                                       hx-page-handler="Search"
+                                       hx-trigger="input changed delay:300ms, search"
+                                       hx-target="#todo-list" />
+                            </div>
+                        </div>
+
                         <!-- Todo Form -->
                         <form hx-post hx-page="index" hx-page-handler="AddTodo" hx-swap="none"
                               hx-on::after-request="this.reset()">

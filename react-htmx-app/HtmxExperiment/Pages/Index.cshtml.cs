@@ -12,14 +12,23 @@ public class IndexModel(ITodoService todoService) : PageModelExtension
     private readonly ITodoService _todoService = todoService;
 
     public List<Todo> Todos { get; set; } = [];
+    public string SearchTerm { get; set; } = string.Empty;
 
     public int CompletedCount { get; set; }
     public int TotalCount { get; set; }
 
-    public async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync(string? searchTerm = null)
     {
-        await LoadTodosAsync();
+        SearchTerm = searchTerm ?? string.Empty;
+        await LoadTodosAsync(searchTerm);
         return Page();
+    }
+
+    public async Task<IActionResult> OnGetSearchAsync(string? searchTerm)
+    {
+        SearchTerm = searchTerm ?? string.Empty;
+        await LoadTodosAsync(searchTerm);
+        return ViewComponent<TodoList, List<Todo>>(Todos);
     }
 
     public async Task<IActionResult> OnPostAddTodoAsync(string newTodoText)
@@ -73,9 +82,17 @@ public class IndexModel(ITodoService todoService) : PageModelExtension
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
-    private async Task LoadTodosAsync()
+    private async Task LoadTodosAsync(string? searchTerm = null)
     {
-        Todos = await _todoService.GetAllTodosAsync();
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            Todos = await _todoService.GetAllTodosAsync();
+        }
+        else
+        {
+            Todos = await _todoService.SearchTodosAsync(searchTerm);
+        }
+        
         CompletedCount = await _todoService.GetCompletedCountAsync();
         TotalCount = await _todoService.GetTotalCountAsync();
     }

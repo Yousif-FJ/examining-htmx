@@ -6,6 +6,7 @@ namespace HtmxExperiment.Services;
 public interface ITodoService
 {
     Task<List<Todo>> GetAllTodosAsync();
+    Task<List<Todo>> SearchTodosAsync(string? searchTerm);
     Task<Todo?> GetTodoByIdAsync(int id);
     Task<Todo> AddTodoAsync(string text);
     Task<Todo?> ToggleTodoAsync(int id);
@@ -23,6 +24,18 @@ public class TodoService(ApplicationDbContext context) : ITodoService
     public async Task<List<Todo>> GetAllTodosAsync()
     {
         return await _context.Todos.OrderBy(t => t.Order).ToListAsync();
+    }
+
+    public async Task<List<Todo>> SearchTodosAsync(string? searchTerm)
+    {
+        var query = _context.Todos.AsQueryable();
+        
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(t => EF.Functions.Like(t.Text.ToLower(), $"%{searchTerm.ToLower()}%"));
+        }
+        
+        return await query.OrderBy(t => t.Order).ToListAsync();
     }
 
     public async Task<Todo?> GetTodoByIdAsync(int id)
