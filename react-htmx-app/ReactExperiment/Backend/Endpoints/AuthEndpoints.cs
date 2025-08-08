@@ -54,7 +54,7 @@ public static class AuthEndpoints
             }
 
             // Sign in the user
-            await signInManager.SignInAsync(user, isPersistent: false);
+            await signInManager.SignInAsync(user, isPersistent: true);
 
             return TypedResults.Ok(new AuthResponse
             {
@@ -91,7 +91,7 @@ public static class AuthEndpoints
             }
 
             var result = await signInManager.PasswordSignInAsync(
-                user, request.Password, isPersistent: false, lockoutOnFailure: false);
+                user, request.Password, isPersistent: true, lockoutOnFailure: false);
 
             if (!result.Succeeded)
             {
