@@ -15,8 +15,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar navbar-expand-sm navbar-light bg-light border-bottom mb-3">
       <div className="container">
-        <span className="navbar-brand mb-0 h1">Todo App</span>
-        
+        <span className="navbar-brand mb-0 h1">React Experiment</span>
         <div className="navbar-nav ms-auto">
           {user && (
             <div className="d-flex align-items-center">
