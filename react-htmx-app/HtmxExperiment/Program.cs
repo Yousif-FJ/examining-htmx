@@ -50,9 +50,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
-// Register services
+// Register the TodoService
 builder.Services.AddScoped<ITodoService, TodoService>();
-builder.Services.AddScoped<IEventService, EventService>();
 
 var app = builder.Build();
 

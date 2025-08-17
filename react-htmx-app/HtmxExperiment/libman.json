@@ -12,16 +12,8 @@
       "destination": "wwwroot/lib/htmx.org"
     },
     {
-      "library": "Sortable@1.15.6",
+      "library": "Sortable@1.15.0",
       "destination": "wwwroot/lib/sortable"
-    },
-    {
-      "provider": "unpkg",
-      "library": "ag-grid-community@latest",
-      "destination": "wwwroot/lib/ag-grid",
-      "files": [
-        "dist/ag-grid-community.min.js"
-      ]
     }
   ]
 }
