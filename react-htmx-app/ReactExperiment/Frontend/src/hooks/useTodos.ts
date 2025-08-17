@@ -7,6 +7,7 @@ export interface UseTodosResult {
   loading: boolean;
   error: string | null;
   addTodo: (text: string) => Promise<void>;
+  updateTodo: (id: number, text: string) => Promise<void>;
   toggleTodo: (id: number) => Promise<void>;
   deleteTodo: (id: number) => Promise<void>;
   clearCompleted: () => Promise<void>;
@@ -41,6 +42,19 @@ export const useTodos = (): UseTodosResult => {
       setTodos(prev => [...prev, newTodo]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create todo');
+      throw err;
+    }
+  };
+
+  const updateTodo = async (id: number, text: string) => {
+    try {
+      setError(null);
+      const updatedTodo = await todoApi.updateTodo(id, { text });
+      setTodos(prev => prev.map(todo => 
+        todo.id === id ? updatedTodo : todo
+      ));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update todo');
       throw err;
     }
   };
@@ -106,6 +120,7 @@ export const useTodos = (): UseTodosResult => {
     loading,
     error,
     addTodo,
+    updateTodo,
     toggleTodo,
     deleteTodo,
     clearCompleted,

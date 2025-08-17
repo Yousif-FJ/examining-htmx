@@ -17,6 +17,7 @@ function TodoApp() {
     loading,
     error,
     addTodo,
+    updateTodo,
     toggleTodo,
     deleteTodo,
     clearCompleted,
@@ -144,6 +145,7 @@ function TodoApp() {
                       <TodoList 
                         todos={filteredTodos} 
                         onToggle={toggleTodo} 
+                        onUpdate={updateTodo}
                         onDelete={deleteTodo} 
                         onReorder={reorderTodos}
                       />

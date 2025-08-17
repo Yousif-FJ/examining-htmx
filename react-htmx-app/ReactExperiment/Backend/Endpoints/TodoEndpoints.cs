@@ -14,6 +14,7 @@ public static class TodoEndpoints
         todoGroup.MapGet("/", GetAllTodos).WithName("GetTodos");
         todoGroup.MapGet("{id}", GetTodoById).WithName("GetTodoById");
         todoGroup.MapPost("/", CreateTodo).WithName("CreateTodo");
+        todoGroup.MapPut("{id}", UpdateTodo).WithName("UpdateTodo");
         todoGroup.MapPatch("{id}/toggle", ToggleTodo).WithName("ToggleTodo");
         todoGroup.MapPatch("reorder", ReorderTodos).WithName("ReorderTodos");
         todoGroup.MapDelete("{id}", DeleteTodo).WithName("DeleteTodo");
@@ -57,6 +58,31 @@ public static class TodoEndpoints
 
         var todoDto = new TodoDto(todo.Id, todo.Text, todo.Completed, todo.Order);
         return TypedResults.Created($"/api/todos/{todo.Id}", todoDto);
+    }
+
+    static async Task<IResult> UpdateTodo(int id, UpdateTodoDto updateTodo, TodoDbContext db)
+    {
+        var todo = await db.Todos.FindAsync(id);
+        if (todo is null)
+        {
+            return TypedResults.NotFound();
+        }
+
+        // Update text if provided
+        if (!string.IsNullOrWhiteSpace(updateTodo.Text))
+        {
+            todo.Text = updateTodo.Text.Trim();
+        }
+
+        // Update completed status if provided
+        if (updateTodo.Completed.HasValue)
+        {
+            todo.Completed = updateTodo.Completed.Value;
+        }
+
+        await db.SaveChangesAsync();
+
+        return TypedResults.Ok(new TodoDto(todo.Id, todo.Text, todo.Completed, todo.Order));
     }
 
     static async Task<IResult> ToggleTodo(int id, TodoDbContext db)

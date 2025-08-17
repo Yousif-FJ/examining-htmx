@@ -5,11 +5,12 @@ import { Todo } from '../types/Todo';
 interface TodoListProps {
   todos: Todo[];
   onToggle: (id: number) => Promise<void>;
+  onUpdate: (id: number, text: string) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
   onReorder: (reorderedTodos: Todo[]) => Promise<void>;
 }
 
-const TodoList: FC<TodoListProps> = ({ todos, onToggle, onDelete, onReorder }) => {
+const TodoList: FC<TodoListProps> = ({ todos, onToggle, onUpdate, onDelete, onReorder }) => {
   const [draggedTodo, setDraggedTodo] = useState<Todo | null>(null);
 
   const handleDragStart = (e: React.DragEvent, todo: Todo) => {
@@ -68,6 +69,7 @@ const TodoList: FC<TodoListProps> = ({ todos, onToggle, onDelete, onReorder }) =
           key={todo.id} 
           todo={todo} 
           onToggle={onToggle} 
+          onUpdate={onUpdate}
           onDelete={onDelete}
           isDragging={draggedTodo?.id === todo.id}
           onDragStart={handleDragStart}

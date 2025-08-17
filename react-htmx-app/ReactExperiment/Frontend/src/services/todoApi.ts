@@ -6,6 +6,11 @@ export interface CreateTodoRequest {
   text: string;
 }
 
+export interface UpdateTodoRequest {
+  text?: string;
+  completed?: boolean;
+}
+
 export interface ClearCompletedResponse {
   deletedCount: number;
 }
@@ -39,6 +44,18 @@ class TodoApiService {
   async createTodo(request: CreateTodoRequest): Promise<Todo> {
     const response = await fetch(`${API_BASE_URL}/todos/`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Include cookies for authentication
+      body: JSON.stringify(request),
+    });
+    return this.handleResponse<Todo>(response);
+  }
+
+  async updateTodo(id: number, request: UpdateTodoRequest): Promise<Todo> {
+    const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
