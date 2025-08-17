@@ -1,0 +1,46 @@
+@page
+@model HtmxExperiment.Pages.EventsModel
+@{
+    ViewData["Title"] = "Events";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h1>Events</h1>
+        <p>Upcoming events and activities</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div id="eventsGrid" style="height: 600px; width: 100%;"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/ag-grid/dist/ag-grid-community.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simple column definitions
+            const columnDefs = [
+                { field: "name", headerName: "Name", width: 200 },
+                { field: "description", headerName: "Description", flex: 1 },
+                { field: "dateTime", headerName: "Date & Time", width: 180 },
+                { field: "location", headerName: "Location", width: 250 }
+            ];
+
+            // Events data from server
+            const rowData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Events,
+                            new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
+
+            // Minimal grid options
+            const gridOptions = {
+                columnDefs: columnDefs,
+                rowData: rowData
+            };
+
+            // Create the grid
+            agGrid.createGrid(document.querySelector('#eventsGrid'), gridOptions);
+        });
+    </script>
+}

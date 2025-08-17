@@ -15,6 +15,7 @@
                 @if (User.Identity?.IsAuthenticated == true)
                 {
                     <a class="nav-link me-3" asp-page="/Index">My Todos</a>
+                    <a class="nav-link me-3" asp-page="/Events">Events</a>
                     <span class="navbar-text me-3">Hello, @User.Identity.Name!</span>
                     <form class="d-inline" asp-page="/Account/Logout" method="post">
                         <button type="submit" class="btn btn-outline-secondary btn-sm">Logout</button>
@@ -35,7 +36,6 @@
         </main>
     </div>
 
-    <script src="~/lib/sortable/Sortable.min.js"></script>
     <script src="~/lib/htmx.org/dist/htmx.min.js"></script>
     <script src="~/js/my.htmx.config.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
