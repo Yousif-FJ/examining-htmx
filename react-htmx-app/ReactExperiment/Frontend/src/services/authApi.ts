@@ -1,6 +1,6 @@
 import { LoginRequest, RegisterRequest, AuthResponse } from '../types/Auth';
 
-const API_BASE_URL = 'http://localhost:5116/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5116/api';
 
 class AuthApiService {
   private async handleResponse<T>(response: Response): Promise<T> {
