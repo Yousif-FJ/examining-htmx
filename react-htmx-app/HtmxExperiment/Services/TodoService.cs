@@ -10,6 +10,7 @@ public interface ITodoService
     Task<Todo?> GetTodoByIdAsync(int id);
     Task<Todo> AddTodoAsync(string text);
     Task<Todo?> ToggleTodoAsync(int id);
+    Task<Todo?> EditTodoAsync(int id, string newText);
     Task<bool> DeleteTodoAsync(int id);
     Task<int> ClearCompletedAsync();
     Task<int> GetCompletedCountAsync();
@@ -67,6 +68,17 @@ public class TodoService(ApplicationDbContext context) : ITodoService
             return null;
 
         todo.Completed = !todo.Completed;
+        await _context.SaveChangesAsync();
+        return todo;
+    }
+
+    public async Task<Todo?> EditTodoAsync(int id, string newText)
+    {
+        var todo = await _context.Todos.FindAsync(id);
+        if (todo == null)
+            return null;
+
+        todo.Text = newText.Trim();
         await _context.SaveChangesAsync();
         return todo;
     }

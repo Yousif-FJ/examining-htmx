@@ -67,6 +67,7 @@
               var sortableInstance = new Sortable(sortable, {
                   animation: 150,
                   ghostClass: 'blue-background-class',
+                  handle: '.drag-handle',  // Only allow dragging from the drag handle
 
                   //Make the `.htmx-indicator` unsortable
                   filter: ".htmx-indicator",

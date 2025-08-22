@@ -82,6 +82,50 @@ public class IndexModel(ITodoService todoService) : PageModelExtension
         return Partial(PartialViewsPaths.TodoListNStatsPartialViewPath, Todos);
     }
 
+    public async Task<IActionResult> OnGetEditTodoAsync(int id)
+    {
+        var todo = await _todoService.GetTodoByIdAsync(id);
+        if (todo == null)
+        {
+            return NotFound();
+        }
+        
+        return ViewComponent<TodoItemEdit, Todo>(todo);
+    }
+
+    public async Task<IActionResult> OnPostEditTodoAsync(int id, string editText)
+    {
+        if (string.IsNullOrWhiteSpace(editText))
+        {
+            ModelState.AddModelError(nameof(editText), "Todo text cannot be empty.");
+            var originalTodo = await _todoService.GetTodoByIdAsync(id);
+            if (originalTodo == null)
+            {
+                return NotFound();
+            }
+            return ViewComponent<TodoItemEdit, Todo>(originalTodo);
+        }
+
+        var todo = await _todoService.EditTodoAsync(id, editText);
+        if (todo == null)
+        {
+            return NotFound();
+        }
+
+        return ViewComponent<TodoItem, Todo>(todo);
+    }
+
+    public async Task<IActionResult> OnPostCancelEditTodoAsync(int id)
+    {
+        var todo = await _todoService.GetTodoByIdAsync(id);
+        if (todo == null)
+        {
+            return NotFound();
+        }
+        
+        return ViewComponent<TodoItem, Todo>(todo);
+    }
+
     private async Task LoadTodosAsync(string? searchTerm = null)
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
