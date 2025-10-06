@@ -15,4 +15,17 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
   </ItemGroup>
 
+  <!-- Build React app during publish -->
+  <Target Name="BuildReactApp" BeforeTargets="Publish">
+    <Message Text="Building React application..." Importance="high" />
+    
+    <!-- Install dependencies -->
+    <Exec Command="npm ci" WorkingDirectory="../Frontend" />
+    
+    <!-- Build React app -->
+    <Exec Command="npm run build" WorkingDirectory="../Frontend" />
+    
+    <Message Text="React application built successfully!" Importance="high" />
+  </Target>
+
 </Project>

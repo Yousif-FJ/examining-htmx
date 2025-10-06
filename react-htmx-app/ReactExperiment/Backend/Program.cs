@@ -61,19 +61,22 @@ builder.Services.ConfigureApplicationCookie(options =>
 // Add Authorization
 builder.Services.AddAuthorization();
 
-// Add CORS for frontend communication
-builder.Services.AddCors(options =>
+// Add CORS for development mode only
+if (builder.Environment.IsDevelopment())
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    builder.Services.AddCors(options =>
     {
-        policy.SetIsOriginAllowed(origin => 
-                new Uri(origin).Host == "localhost" || 
-                new Uri(origin).Host == "127.0.0.1")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // Important for cookie authentication
+        options.AddPolicy("AllowFrontendDev", policy =>
+        {
+            policy.SetIsOriginAllowed(origin => 
+                    new Uri(origin).Host == "localhost" || 
+                    new Uri(origin).Host == "127.0.0.1")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials(); // Important for cookie authentication
+        });
     });
-});
+}
 
 var app = builder.Build();
 
@@ -84,20 +87,44 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
+// Add security headers middleware (strict in production, relaxed in development)
+app.Use(async (context, next) =>
+{
+    if (app.Environment.IsProduction())
+    {
+        // Strict same-origin policy for production
+        context.Response.Headers["Cross-Origin-Embedder-Policy"] = "require-corp";
+        context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+    }
+    
+    await next();
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseCors("AllowFrontendDev"); // Enable CORS only in development
 }
 
-app.UseCors("AllowFrontend");
+// Serve static files and SPA fallback only in production
+if (app.Environment.IsProduction())
+{
+    app.UseStaticFiles();
+}
 
 // Add authentication and authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map endpoints
+// Map API endpoints
 app.MapAuthEndpoints();
 app.MapTodoEndpoints();
+
+// SPA fallback - serve index.html for all non-API routes (production only)
+if (app.Environment.IsProduction())
+{
+    app.MapFallbackToFile("index.html");
+}
 
 app.Run();

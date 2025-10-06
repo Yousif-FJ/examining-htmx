@@ -12,8 +12,8 @@ dist
 dist-ssr
 *.local
 
-# Environment variables
-.env
+# Environment variables (allow .env.development and .env.production, but ignore .env.local)
+.env.local
 
 # Editor directories and files
 .vscode/*
