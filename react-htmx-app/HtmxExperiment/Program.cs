@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using HtmxExperiment.Models;
 using HtmxExperiment.Services;
@@ -71,6 +71,17 @@ using (var scope = app.Services.CreateScope())
         context.SaveChanges();
     }
 }
+
+app.Use(async (context, next) =>
+{
+    // Cross‑Origin‑Embedder‑Policy
+    context.Response.Headers["Cross-Origin-Embedder-Policy"] = "require-corp";
+
+    // Cross‑Origin‑Opener‑Policy
+    context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+
+    await next();
+});
 
 app.UseDeveloperExceptionPage();
 

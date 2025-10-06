@@ -15,7 +15,6 @@
             <div class="navbar-nav ms-auto">
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <a class="nav-link me-3" asp-page="/Index">My Todos</a>
                     <span class="navbar-text me-3">Hello, @User.Identity.Name!</span>
                     <form class="d-inline" asp-page="/Account/Logout" method="post">
                         <button type="submit" class="btn btn-outline-secondary btn-sm">Logout</button>
