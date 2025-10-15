@@ -58,7 +58,6 @@ function TodoApp() {
   if (authLoading) {
     return (
       <>
-        <Navbar />
         <div className="container py-4">
           <div className="row justify-content-center">
             <div className="col-md-8 col-lg-6">
